@@ -28,6 +28,7 @@ abstract class MainDatabase : RoomDatabase() {
                     MainDatabase::class.java,
                     "main_database"
                 )
+                    .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
