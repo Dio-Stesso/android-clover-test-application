@@ -6,16 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.testapplication.database.dao.ItemDao
 import com.example.testapplication.database.entity.Item
+import org.koin.core.component.KoinComponent
 
 @Database(entities = [Item::class], version = 3, exportSchema = false)
-abstract class MainDatabase : RoomDatabase() {
+abstract class MainDatabase : RoomDatabase(), KoinComponent {
     abstract fun itemDao(): ItemDao
 
     companion object {
         private var INSTANCE: MainDatabase? = null
 
         fun getDatabase(context: Context): MainDatabase {
-            //val tempInstance = INSTANCE
             val tempInstance = INSTANCE
             if (tempInstance != null) {
                 return tempInstance

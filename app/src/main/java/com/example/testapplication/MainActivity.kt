@@ -10,16 +10,13 @@ import com.clover.sdk.v3.inventory.InventoryConnector
 import com.clover.sdk.v3.order.OrderConnector
 import com.example.testapplication.adapter.ItemAdapter
 import com.example.testapplication.databinding.ActivityMainBinding
-import com.example.testapplication.receiver.event.NewItemLinesReceiver
 import com.example.testapplication.service.ItemService
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 
 class MainActivity : AppCompatActivity() {
     private lateinit var activityBinding: ActivityMainBinding
     private lateinit var managerBinding: RecyclerView.LayoutManager
 
-    private lateinit var itemService: ItemService
+    private var itemService: ItemService = ItemService()
 
     private var account: Account? = null
     private var orderConnector: OrderConnector? = null
@@ -27,9 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EventBus.getDefault().register(this)
 
-        account = CloverAccount.getAccount(this)
         checkingCloverAccount()
         connectToCloverOrder()
         connectToCloverInventory()
@@ -41,7 +36,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        itemService = ItemService(applicationContext, orderConnector!!, inventoryConnector!!)
         val items = itemService.getAllItems()
         activityBinding.rvItemList.apply {
             adapter = ItemAdapter(items)
@@ -53,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         disconnectFromCloverOrder()
         disconnectFromCloverInventory()
-        EventBus.getDefault().unregister(this)
     }
 
     private fun connectToCloverOrder() {
@@ -94,13 +87,5 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
-    }
-
-    @Subscribe
-    fun handelRequestFromOrderReceiver(event: NewItemLinesReceiver) {
-        itemService.updateItemPriceOnRandomPercentByOrderId(
-            orderId = event.orderId,
-            itemLineIds = event.itemLines
-        )
     }
 }

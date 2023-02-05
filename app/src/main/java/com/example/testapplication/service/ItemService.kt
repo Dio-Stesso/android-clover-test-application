@@ -1,26 +1,27 @@
 package com.example.testapplication.service
 
-import android.content.Context
 import com.clover.sdk.v3.inventory.InventoryConnector
 import com.clover.sdk.v3.inventory.Modifier
 import com.clover.sdk.v3.inventory.ModifierGroup
 import com.clover.sdk.v3.order.OrderConnector
 import com.example.testapplication.database.MainDatabase
 import com.example.testapplication.database.entity.Item
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.util.Date
 import kotlin.random.Random
 
-class ItemService(
-    private val context: Context,
-    private val orderConnector: OrderConnector,
-    private val inventoryConnector: InventoryConnector
-) {
+class ItemService : KoinComponent {
+    private val orderConnector: OrderConnector by inject()
+    private val inventoryConnector: InventoryConnector by inject()
+    private val mainDatabase: MainDatabase by inject()
+
     fun getAllItems(): List<Item> {
-        return MainDatabase.getDatabase(context).itemDao().getAllItems()
+        return mainDatabase.itemDao().getAllItems()
     }
 
     fun saveItems(items: List<Item>) {
-        MainDatabase.getDatabase(context).itemDao().insertItems(items)
+        mainDatabase.itemDao().insertItems(items)
     }
 
     fun updateItemPriceOnRandomPercentByOrderId(orderId: String, itemLineIds: List<String>) {

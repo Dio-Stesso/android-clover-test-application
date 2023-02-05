@@ -6,11 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testapplication.database.entity.Item
 import com.example.testapplication.databinding.ItemRecyclerviewBinding
 
-class ItemAdapter(private val items: List<Item>) :
-    RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter(private val items: List<Item>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
-    inner class ItemViewHolder(private val binding: ItemRecyclerviewBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class ItemViewHolder(private val binding: ItemRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item) {
             binding.itemList = item
         }

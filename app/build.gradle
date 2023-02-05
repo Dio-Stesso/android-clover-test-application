@@ -8,20 +8,41 @@ android {
     compileSdk 33
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.example.testapplication"
         minSdk 17
+        //noinspection ExpiredTargetSdkVersion
         targetSdk 25
-        versionCode 1
+        versionCode 2
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("testKey.jks")
+            storePassword System.getenv("testKey")
+            keyAlias System.getenv("cert")
+            keyPassword System.getenv("testKey")
+            v1SigningEnabled true
+            v2SigningEnabled false
+        }
+    }
+
     buildTypes {
+        debug {
+            testCoverageEnabled false
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.release
         }
+    }
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -33,6 +54,12 @@ android {
     buildFeatures {
         dataBinding true
         viewBinding true
+    }
+    signingConfigs {
+        release {
+            v1SigningEnabled true
+            v2SigningEnabled false
+        }
     }
 }
 
@@ -53,5 +80,7 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt "androidx.room:room-compiler:$room_version"
 
-    implementation("org.greenrobot:eventbus:3.3.1")
+
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation "io.insert-koin:koin-android:3.1.2"
 }

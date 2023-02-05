@@ -9,10 +9,10 @@ import java.text.SimpleDateFormat
 @Entity(tableName = "items")
 data class Item(
     @ColumnInfo(name = "date") var date: Long,
-    @ColumnInfo(name = "old_price") val oldPrice: Double,
-    @ColumnInfo(name = "new_price") val newPrice: Double,
-    @ColumnInfo(name = "order_id") val orderId: String,
-    @ColumnInfo(name = "item_id") val itemId: String,
+    @ColumnInfo(name = "old_price") var oldPrice: Double,
+    @ColumnInfo(name = "new_price") var newPrice: Double,
+    @ColumnInfo(name = "order_id") var orderId: String,
+    @ColumnInfo(name = "item_id") var itemId: String,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null
