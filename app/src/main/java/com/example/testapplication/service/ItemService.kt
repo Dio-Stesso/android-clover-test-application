@@ -24,19 +24,19 @@ class ItemService : KoinComponent {
         mainDatabase.itemDao().insertItems(items)
     }
 
-    fun updateItemPriceOnRandomPercentByOrderId(orderId: String, itemLineIds: List<String>) {
+    fun updateItemPriceOnRandomPercentByOrderId(orderId: String, itemId: String) {
         val lineItems = orderConnector.getOrder(orderId).lineItems
         val updatedItems = mutableListOf<Item>()
         val percent = Random.nextInt(5, 26)
 
         lineItems
-            .filter { itemLineIds.contains(it.id) }
+            .filter { it.id.equals(itemId) }
             .distinctBy { it.taxRates[0].id }
             .forEach {
                 val newPrice = (it.price + it.price * (percent / 100.0)) / 100
                 updatedItems.add(Item(Date().time, it.price.toDouble() / 100.0, newPrice, orderId, it.id))
                 if (it.modifications == null) {
-                    val priceForAddToLineItem = (((percent * it.price / 100.0)) * itemLineIds.size)
+                    val priceForAddToLineItem = (((percent * it.price / 100.0)))
                     updateItemLinesOnScreen(percent, priceForAddToLineItem.toLong(), orderId, it.id)
                 }
                 it.price = newPrice.toLong()
