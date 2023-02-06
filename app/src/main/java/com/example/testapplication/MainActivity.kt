@@ -15,9 +15,7 @@ import com.example.testapplication.service.ItemService
 class MainActivity : AppCompatActivity() {
     private lateinit var activityBinding: ActivityMainBinding
     private lateinit var managerBinding: RecyclerView.LayoutManager
-
     private var itemService: ItemService = ItemService()
-
     private var account: Account? = null
     private var orderConnector: OrderConnector? = null
     private var inventoryConnector: InventoryConnector? = null
