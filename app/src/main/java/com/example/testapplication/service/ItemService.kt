@@ -33,13 +33,13 @@ class ItemService : KoinComponent {
             .filter { itemLineIds.contains(it.id) }
             .distinctBy { it.taxRates[0].id }
             .forEach {
-                val newPrice = it.price + it.price * (percent / 100)
-                updatedItems.add(Item(Date().time, it.price.toDouble(), newPrice.toDouble(), orderId, it.id))
+                val newPrice = (it.price + it.price * (percent / 100.0)) / 100
+                updatedItems.add(Item(Date().time, it.price.toDouble() / 100.0, newPrice, orderId, it.id))
                 if (it.modifications == null) {
-                    val priceForAddToLineItem = ((percent * it.price / 100) * itemLineIds.size)
-                    updateItemLinesOnScreen(percent, priceForAddToLineItem, orderId, it.id)
+                    val priceForAddToLineItem = (((percent * it.price / 100.0)) * itemLineIds.size)
+                    updateItemLinesOnScreen(percent, priceForAddToLineItem.toLong(), orderId, it.id)
                 }
-                it.price = newPrice
+                it.price = newPrice.toLong()
             }
         if (updatedItems.isNotEmpty()) {
             saveItems(updatedItems)
